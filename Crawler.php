@@ -54,6 +54,7 @@ class chCrawler {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);
 		curl_setopt($ch, CURLOPT_HEADER, false);
+		//curl_setopt($ch, CURLOPT_USERAGENT, 'Monazilla/1.00 (kanata/1.00)');
 		//proxy setting
 		//curl_setopt($ch, CURLOPT_PROXY, '');
 		$result = curl_exec($ch);
@@ -91,5 +92,7 @@ class chCrawler {
 
 }
 
-$cr = new chCrawler("http://hayabusa.2ch.net/livefoot/");
+//$cr = new chCrawler("http://hayabusa.2ch.net/livefoot/");
+//$cr->Devel();
+$cr = new chCrawler("http://ikura.2ch.net/football/");
 $cr->Devel();
