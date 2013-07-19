@@ -28,8 +28,9 @@ class ThreadFactory {
 		$result["uid"] = $dateAndUid["uid"];
 		$result["contents"] = $elm[$i++];
 		$result["title"] = $elm[$i++];
-		// $result["anchor"] = 
-		// $result["movie_flg"] =  
+		$anchors = $this->parseAnchor($result["contents"]);
+		$result["anchors"] = $anchors;
+		$result["movie_flg"] = $this->hasMovie($result["contents"]);
 		return $result;
 	}
 	
@@ -38,12 +39,24 @@ class ThreadFactory {
 		return array("date" => $a[0], "uid" => $a[1]);
 	}
 	
+	private function parseAnchor($str) {
+		$str = preg_replace('@<a(?:>| [^>]*?>)(.*?)</a>@s','$1',$str);
+		preg_match_all("/&gt;&gt;([0-9]+)/", $str, $a);
+		return $a[1];
+	}
+	
+	private function hasMovie($str) {
+// 		preg_match_all("/youtube.com/", $str, $a);
+		return strpos($str,"youtube.com") !== false;
+	}
+	
 	private function createHtml($resAry) {
 	}
 	
 	public function test() {
-		$this->create($this->loadDat("1240838194.dat"));
+		$this->create($this->loadDat("1372500160.dat"));
 	}
+	
 	
 	public function loadDat($filename) {
 		$path = "dat/";
