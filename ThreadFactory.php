@@ -1,12 +1,19 @@
 <?php
 
 class ThreadFactory {
-	/** htmlを作って吐く */
-	public function create($datStr){
+	
+	private $datname;
+	
+	public function __construct($datname){
+			$this->datname = $datname;
+	}
+	
+	/** datの内容から被アンカーをカウントした配列を返す */
+	private function createFromStr($datStr){
 		$lines = explode("\n", trim($datStr));
 		$resAry = array();
 		foreach($lines as $line) {
-			print $line . "\n";
+			//print $line . "\n";
 			$dict = $this->createRes($line);
 			$resAry[] = $dict;
 		}
@@ -69,8 +76,8 @@ class ThreadFactory {
 	private function createHtml($resAry) {
 	}
 	
-	public function test() {
-		$this->create($this->loadDat("1372500160.dat"));
+	public function create() {
+		return $this->createFromStr($this->loadDat($this->datname));
 	}
 	
 	
@@ -80,7 +87,7 @@ class ThreadFactory {
 	}
 }
 
-$a = new ThreadFactory();
-$a->test();
+//$a = new ThreadFactory();
+//$a->test();
 
 
