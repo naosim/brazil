@@ -1,5 +1,6 @@
 <?php
 require_once "ThreadFactory.php";
+require_once "Board2Html.php";
 
 class BoardFactory {
 	
@@ -20,7 +21,7 @@ class BoardFactory {
 		if($board['movie_flg']){
 			$board['movie_urls'] = $this->getMovieUrl($reses);
 		}
-		print_r($board);
+		//print_r($board);
 	}
 	
 	public function hasMovie($reses) {
@@ -53,4 +54,8 @@ class BoardFactory {
 }
 
 $test = new BoardFactory();
-$test->create("1372845811.dat");
+$board = $test->create("1234110559.dat");
+$boards = array($board);
+$html = new Board2Html();
+$html_out = $html->create($boards);
+
