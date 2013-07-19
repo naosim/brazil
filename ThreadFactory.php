@@ -10,10 +10,9 @@ class ThreadFactory {
 			$dict = $this->createRes($line);
 			$resAry[] = $dict;
 		}
-		
-		print_r($resAry);
-		
-		// createHtml($resAry);
+		$resAry = $this->recieveAnchorCount($resAry);
+
+		return $resAry;
 	}
 	
 	/** 1行のデータから連想配列作る */
@@ -48,6 +47,23 @@ class ThreadFactory {
 	private function hasMovie($str) {
 // 		preg_match_all("/youtube.com/", $str, $a);
 		return strpos($str,"youtube.com") !== false;
+	}
+	
+	private function recieveAnchorCount($resAry) {
+		$result = array();
+		
+		foreach ($resAry as $res) {
+			$result[] = $res;
+			foreach($res["anchors"] as $index) {
+				$hi_res = $result[$index];
+				if(!isset($hi_res["recieve_anchor_count"])) {
+					$hi_res["recieve_anchor_count"] = 0;
+				}
+				$hi_res["recieve_anchor_count"]++;
+				$result[$index] = $hi_res;
+			}
+		}
+		return $result;
 	}
 	
 	private function createHtml($resAry) {
