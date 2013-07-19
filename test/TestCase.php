@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 簡易テストクラス
  *
@@ -80,23 +79,6 @@ class TestCase {
 			$this -> errorMessage = $message;
 		}
 	}
-
-	private function startMessage($className, $methodName) {
-		echo "$className $methodName ";
-	}
-
-	private function failed($className, $methodName, $message) {
-		echo "\n## TEST FAILED ##\n";
-		echo "class : $className \n";
-		echo "case  : $methodName \n";
-		echo "msg   : $message \n";
-		exit ;
-	}
-
-	private function success($className) {
-		echo "\nSUCCESS : $className \n";
-	}
-
 }
 
 /**
