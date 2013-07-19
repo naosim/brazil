@@ -57,5 +57,5 @@ $test = new BoardFactory();
 $board = $test->create("1234110559.dat");
 $boards = array($board);
 $html = new Board2Html();
-$html_out = $html->create($boards);
+$html_out = $html->create($boardoards);
 
