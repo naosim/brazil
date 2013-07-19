@@ -22,6 +22,7 @@ class BoardFactory {
 			$board['movie_urls'] = $this->getMovieUrl($reses);
 		}
 		//print_r($board);
+		return $board;
 	}
 	
 	public function hasMovie($reses) {
@@ -54,8 +55,13 @@ class BoardFactory {
 }
 
 $test = new BoardFactory();
-$board = $test->create("1234110559.dat");
+$board = $test->create("1265652965.dat");
+
 $boards = array($board);
+
+
+
 $html = new Board2Html();
-$html_out = $html->create($boardoards);
+$html_out = $html->create($boards);
+print_r($html_out);
 

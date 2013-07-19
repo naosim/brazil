@@ -11,7 +11,7 @@ class Board2Html {
 	}
 	
 	public function createHeader() {
-		return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Bootbusiness | Short description about company"><meta name="author" content="Your name"><title>Bootbusiness | Give unique title of the page here</title><!-- Bootstrap --><link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap responsive --><link href="css/bootstrap-responsive.min.css" rel="stylesheet"><!-- Font awesome - iconic font with IE7 support --> <link href="css/font-awesome.css" rel="stylesheet"><link href="css/font-awesome-ie7.css" rel="stylesheet"><!-- Bootbusiness theme --><link href="css/boot-business.css" rel="stylesheet"></head><body><!-- Start: HEADER --><header><!-- Start: Navigation wrapper --><div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a href="index.html" class="brand brand-bootbus">Bootbusiness</a><!-- Below button used for responsive navigation --></div></div></div><!-- End: Navigation wrapper --></header><!-- End: HEADER --><!-- Start: Main content --><div class="content"><div class="container"><!-- Start: Product description --><airticle class="article">';
+		return '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="description" content="Bootbusiness | Short description about company"><meta name="author" content="Your name"><title>Bootbusiness | Give unique title of the page here</title><!-- Bootstrap --><link href="css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap responsive --><link href="css/bootstrap-responsive.min.css" rel="stylesheet"><!-- Font awesome - iconic font with IE7 support --> <link href="css/font-awesome.css" rel="stylesheet"><link href="css/font-awesome-ie7.css" rel="stylesheet"><!-- Bootbusiness theme --><link href="css/boot-business.css" rel="stylesheet"></head><body><!-- Start: HEADER --><header><!-- Start: Navigation wrapper --><div class="navbar navbar-fixed-top"><div class="navbar-inner"><div class="container"><a href="index.html" class="brand brand-bootbus">Brazil</a><!-- Below button used for responsive navigation --></div></div></div><!-- End: Navigation wrapper --></header><!-- End: HEADER --><!-- Start: Main content --><div class="content"><div class="container"><!-- Start: Product description --><airticle class="article">';
 	}
 	
 	public function createFooter() {
@@ -25,12 +25,15 @@ class Board2Html {
 		$urls = $board['movie_urls'];
 		
 		$result = "";
+		
+		
+		
 		$result .= $this->getYoutubeMovie($urls[0]) . '<br>';
 		
 		// print_r($board["reses"]);
 		
-		$resWithMovie = $this->getResesWithMovie($board["reses"]);
-		print_r($resWithMovie);
+		//$resWithMovie = $this->getResesWithMovie($board["reses"]);
+		// print_r($resWithMovie);
 		$result .= $this->getResHtml($board["reses"]) . '<br>';
 		
 		return $result;
@@ -53,7 +56,7 @@ class Board2Html {
 	}
 	
 	public function getResHtml($reses) {
-		$result ="";
+		$result = "";
 		foreach ($reses as $res) {
 			$result .= 'name: ' . $res["name"] . '<br>';
 			$result .= $res["contents"] . '<br><hr>';
@@ -72,10 +75,7 @@ class Board2Html {
 		
 		$boards = array($board);
 		$result = $this->create($boards);
-		
 		print_r($result);
+
 	} 
 }
-
-$a = new Board2Html();
-$a->test();
