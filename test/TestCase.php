@@ -2,7 +2,7 @@
 
 /**
  * 簡易テストクラス
- * 
+ *
  * 使い方
  * - このクラスを継承する
  * - testで始まるメソッド名でメソッドを作成する
@@ -16,7 +16,7 @@ class TestCase {
 	private $testMethodNames;
 
 	public function runTest() {
-		$this -> runTestMethodInCass(get_class($this));
+		$this -> runTestMethodsInClass(get_class($this));
 	}
 
 	public function getTestCount() {
@@ -38,29 +38,31 @@ class TestCase {
 					$this -> testMethodNames[] = $methodName;
 			}
 		}
-
 		return $this -> testMethodNames;
 	}
 
-	private function runTestMethodInCass() {
+	private function runTestMethodsInClass() {
 		$className = get_class($this);
-		$reflClass = new ReflectionClass($className);
-		$testObj = $reflClass -> newInstance();
-
 		$testMethods = $this -> getTestMethodNames();
+		
 		foreach ($testMethods as $testMethod) {
-			$reflMethod = new ReflectionMethod($className, $testMethod);
-			$this -> startMessage($className, $testMethod);
-			$this -> setup();
-			$reflMethod -> invoke($this);
-			$this -> tearDown();
-			if ($this -> hasError == true) {
-				$this -> failed($className, $testMethod, $this -> errorMessage);
-			} else {
-				echo "success\n";
-			}
+			$this -> runTestMethod($className, $testMethod);
 		}
+		
 		$this -> success($className);
+	}
+
+	public function runTestMethod($className, $testMethod) {
+		$reflMethod = new ReflectionMethod($className, $testMethod);
+		$this -> startMessage($className, $testMethod);
+		$this -> setup();
+		$reflMethod -> invoke($this);
+		$this -> tearDown();
+		if ($this -> hasError == true) {
+			$this -> failed($className, $testMethod, $this -> errorMessage);
+		} else {
+			echo "success\n";
+		}
 	}
 
 	/**
@@ -89,5 +91,4 @@ class TestCase {
 	private function success($className) {
 		echo "\nSUCCESS : $className \n";
 	}
-
 }
