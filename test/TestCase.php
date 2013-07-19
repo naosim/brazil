@@ -14,6 +14,11 @@ class TestCase {
 	private $hasError = false;
 	private $errorMessage;
 	private $testMethodNames;
+	private $output;
+
+	public function __construct($output = null) {
+		$this -> output = $output ? $output : new UTOutput();
+	}
 
 	public function runTest() {
 		$this -> runTestMethodsInClass(get_class($this));
@@ -44,24 +49,24 @@ class TestCase {
 	private function runTestMethodsInClass() {
 		$className = get_class($this);
 		$testMethods = $this -> getTestMethodNames();
-		
+
 		foreach ($testMethods as $testMethod) {
 			$this -> runTestMethod($className, $testMethod);
 		}
-		
-		$this -> success($className);
+		$this -> output -> successTestCase($className);
 	}
 
 	public function runTestMethod($className, $testMethod) {
 		$reflMethod = new ReflectionMethod($className, $testMethod);
-		$this -> startMessage($className, $testMethod);
+		$this -> output -> startOneTestCaseMessage($className, $testMethod);
 		$this -> setup();
 		$reflMethod -> invoke($this);
 		$this -> tearDown();
 		if ($this -> hasError == true) {
-			$this -> failed($className, $testMethod, $this -> errorMessage);
+			$this -> output -> failedTestCase($className, $testMethod, $this -> errorMessage);
+			exit;
 		} else {
-			echo "success\n";
+			$this -> output -> successOneCase($className, $testMethod);
 		}
 	}
 
@@ -91,4 +96,34 @@ class TestCase {
 	private function success($className) {
 		echo "\nSUCCESS : $className \n";
 	}
+
+}
+
+/**
+ * テストの各ステータスの表示出力
+ * 
+ * 出力方法を変えたい場合は
+ * このクラスと同じインターフェースのクラスを作って
+ * TestCaseのコンストラクタに渡してください。
+ */
+class UTOutput {
+	public function startOneTestCaseMessage($className, $methodName) {
+		echo "$className $methodName ";
+	}
+	
+	public function successOneCase($className, $methodName) {
+		echo "success\n";
+	}
+
+	public function successTestCase($className) {
+		echo "\nSUCCESS : $className \n";
+	}
+
+	public function failedTestCase($className, $methodName, $message) {
+		echo "\n## TEST FAILED ##\n";
+		echo "class : $className \n";
+		echo "case  : $methodName \n";
+		echo "msg   : $message \n";
+	}
+
 }
