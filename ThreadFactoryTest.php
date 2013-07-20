@@ -39,6 +39,3 @@ class ThreadFactroyTest extends TestCase {
 		return null;
 	}
 }
-
-$test = new ThreadFactroyTest();
-$test -> runTest();

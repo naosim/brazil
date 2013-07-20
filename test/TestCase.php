@@ -13,7 +13,7 @@ class TestCase {
 	private $hasError = false;
 	private $errorMessage;
 	private $testMethodNames;
-	private $output;
+	protected $output;
 
 	public function __construct($output = null) {
 		$this -> output = $output ? $output : new UTOutput();
@@ -49,6 +49,7 @@ class TestCase {
 		$className = get_class($this);
 		$testMethods = $this -> getTestMethodNames();
 
+		$this -> output -> startTestCaseMessage($className);
 		foreach ($testMethods as $testMethod) {
 			$this -> runTestMethod($className, $testMethod);
 		}
@@ -118,20 +119,24 @@ class TestCase {
  * TestCaseのコンストラクタに渡してください。
  */
 class UTOutput {
+	public function startTestCaseMessage($className) {
+		echo "## $className ##\n";
+	}
+	
 	public function startOneTestCaseMessage($className, $methodName) {
-		echo "$className $methodName ";
+		echo "  start $className $methodName ";
 	}
 
 	public function successOneCase($className, $methodName) {
-		echo "success\n";
+		echo "-> success\n";
 	}
 
 	public function successTestCase($className) {
-		echo "\nSUCCESS : $className \n";
+		echo "$className is All SUCCESS\n";
 	}
 
 	public function failedTestCase($className, $methodName, $message) {
-		echo "\n## TEST FAILED ##\n";
+		echo "## TEST FAILED ##\n";
 		echo "class : $className \n";
 		echo "case  : $methodName \n";
 		echo "msg   : $message \n";

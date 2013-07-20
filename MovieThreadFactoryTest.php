@@ -15,6 +15,3 @@ class MovieThreadFactoryTest extends TestCase {
 		
 	}
 }
-
-$test = new MovieThreadFactoryTest();
-$test -> runTest();
