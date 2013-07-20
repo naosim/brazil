@@ -63,7 +63,7 @@ class TestCase {
 		$this -> tearDown();
 		if ($this -> hasError == true) {
 			$this -> output -> failedTestCase($className, $testMethod, $this -> errorMessage);
-			exit;
+			exit ;
 		} else {
 			$this -> output -> successOneCase($className, $testMethod);
 		}
@@ -73,17 +73,25 @@ class TestCase {
 	 * @param boolean
 	 * @param string
 	 */
-	public function assertEq($isSuccess, $message) {
-		if (!$isSuccess) {
+	public function assertTrue($isSuccess, $message) {
+		if ($isSuccess === false) {
 			$this -> hasError = true;
 			$this -> errorMessage = $message;
 		}
 	}
+
+	public function assertEq($exp, $act, $message) {
+		$expType = gettype($exp);
+		$actType = gettype($act);
+		$message = $message . " : exp = ($expType)$exp, act = ($actType)$act";
+		$this -> assertTrue($exp === $act, $message);
+	}
+
 }
 
 /**
  * テストの各ステータスの表示出力
- * 
+ *
  * 出力方法を変えたい場合は
  * このクラスと同じインターフェースのクラスを作って
  * TestCaseのコンストラクタに渡してください。
@@ -92,7 +100,7 @@ class UTOutput {
 	public function startOneTestCaseMessage($className, $methodName) {
 		echo "$className $methodName ";
 	}
-	
+
 	public function successOneCase($className, $methodName) {
 		echo "success\n";
 	}
