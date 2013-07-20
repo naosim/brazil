@@ -3,7 +3,9 @@ require_once "Res.php";
 require_once "Thread.php";
 
 class ThreadFactory {
-	public function __construct(){
+	private $contentsFactory;
+	public function __construct($contentsFactory = null){
+		$this -> contentsFactory = $contentsFactory ? $contentsFactory : new ContentsFactory();
 	}
 	
 	/** 
@@ -39,15 +41,11 @@ class ThreadFactory {
 		$res->name = $elm[$i++];
 		$res->address = $elm[$i++];
 		$dateAndUid = $this->parseDateAndUid($elm[$i++]);
-		$res->writeDate = $dateAndUid["date"];
+		$res->writeDate = new WriteDate($dateAndUid["date"]);
 		$res->uid = $dateAndUid["uid"];
-		$res->contents = $elm[$i++];
+		$res->contents = $this->contentsFactory->create($elm[$i++]);
 		$res->title = $elm[$i++];
-		
-		$aa = $this->parseAnchor($res->contents);
-		print_r($aa);
-		
-		$res->anchors = $this->parseAnchor($res->contents);
+		$res->anchors = $this->parseAnchor($res->contents -> raw());
 		// $result["movie_flg"] = $this->hasMovie($result["contents"]);
 		return $res;
 	}

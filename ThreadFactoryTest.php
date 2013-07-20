@@ -16,8 +16,10 @@ class ThreadFactroyTest extends TestCase {
 		$factory = new ThreadFactory();
 		$resStr = 'さあ名無しさん、ここは守りたい<><>2013/06/29(土) 19:07:51.65 ID:Ki1/vEEi0<> <a href="../test/read.cgi/livefoot/1372499828/1" target="_blank">&gt;&gt;1</a>乙 <br>  <br> 今日も大逆転劇か。 <>';
 		$res = $factory -> createRes($resStr);
-		$this -> assertEq('2013/06/29(土) 19:07:51.65', $res -> writeDate, "writeDate");
+		$this -> assertEq('2013/06/29(土) 19:07:51.65', $res -> writeDate -> strDate(), "writeDate");
+		$this -> assertEq('Ki1/vEEi0', $res -> uid, "uid");
 		$this -> assertEq(1, $res -> anchors[0], "anchors");
+		$this -> assertEq(' <a href="../test/read.cgi/livefoot/1372499828/1" target="_blank">&gt;&gt;1</a>乙 <br>  <br> 今日も大逆転劇か。 ', $res -> contents -> raw(), "anchors");
 	}
 
 	public function test_parseAnchor() {
