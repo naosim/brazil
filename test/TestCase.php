@@ -80,11 +80,32 @@ class TestCase {
 		}
 	}
 
+	public function assertFalse($isSuccess, $message) {
+		$this -> assertTrue($isSuccess !== true, $message);
+	}
+
 	public function assertEq($exp, $act, $message) {
-		$expType = gettype($exp);
-		$actType = gettype($act);
-		$message = $message . " : exp = ($expType)$exp, act = ($actType)$act";
-		$this -> assertTrue($exp === $act, $message);
+		$result = $exp === $act;
+		if($result) {
+			$this -> assertTrue($exp === $act, $message);
+			return;
+		}
+		
+		$expType = gettype($exp) == "object" ? get_class($exp) : gettype($exp);
+		$actType = gettype($act) == "object" ? get_class($act) : gettype($act);
+
+		$expVal = is_object($exp) ? 'obj' : $exp;
+		$actVal = is_object($act) ? 'obj' : $act;
+
+		$message = $message . " : exp = ($expType)$expVal, act = ($actType)$actVal";
+
+		$this -> assertTrue($result, $message);
+	}
+	
+	public function assertSameType($expObj, $actObj, $message) {
+		$expType = gettype($expObj) == "object" ? get_class($expObj) : gettype($expObj);
+		$actType = gettype($actObj) == "object" ? get_class($actObj) : gettype($actObj);
+		$this->assertEq($expType, $actType, $message);
 	}
 
 }

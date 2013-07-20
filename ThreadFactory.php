@@ -23,9 +23,7 @@ class ThreadFactory {
 		}
 		
 		// スレッド生成
-		$thread = new Thread();
-		$thread->name = $resAry[0]->title;
-		$thread->resArray = $resAry;
+		$thread = new Thread($resAry[0]->title, null, $resAry);
 		return $thread;
 	}
 	
@@ -68,9 +66,9 @@ class ThreadFactory {
 	}
 	
 	private function hasMovie($str) {
-// 		preg_match_all("/youtube.com/", $str, $a);
 		return strpos($str,"youtube.com") !== false;
 	}
+	
 	
 	private function recieveAnchorCount($resAry) {
 		$result = array();
@@ -90,14 +88,8 @@ class ThreadFactory {
 	}
 	
 	
-	public function create($datname) {
-		return $this->createFromStr($this->loadDat($datname));
-	}
-	
-	
-	public function loadDat($filename) {
-		$path = "dat/";
-		return file_get_contents($path . $filename);
+	public function create($strDat) {
+		return $this->createFromStr($strDat);
 	}
 }
 

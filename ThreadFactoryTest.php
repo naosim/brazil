@@ -2,12 +2,18 @@
 require_once "test/TestCase.php";
 require_once "ThreadFactory.php";
 
+function undefine() {
+	return "";
+}
+
 class ThreadFactroyTest extends TestCase {
 	public function test_hoge() {
 		$factory = new ThreadFactory();
-		$result = $factory -> create("1372499828.dat");
-		$this -> assertEq("fc岐阜", $result -> name, "nameが正しい");
-		$resAry = $result -> resArray;
+		$filename = "1372499828.dat";
+		$filename = file_get_contents("dat/$filename");
+		$result = $factory -> create($filename);
+		$this -> assertEq("fc岐阜", $result -> name(), "nameが正しい");
+		$resAry = $result -> resArray();
 		$this -> assertEq(125, count($resAry), "resArray count");
 
 	}
@@ -28,7 +34,10 @@ class ThreadFactroyTest extends TestCase {
 		$result = $factory -> parseAnchor($str);
 		$this -> assertEq(1, $result[0], "anchors");
 	}
-
+	
+	private function get() {
+		return null;
+	}
 }
 
 $test = new ThreadFactroyTest();
