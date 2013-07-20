@@ -1,54 +1,72 @@
 <?php
+require_once "Res.php";
+require_once "Thread.php";
 
 class ThreadFactory {
-	
-	private $datname;
-	
-	public function __construct($datname){
-			$this->datname = $datname;
+	public function __construct(){
 	}
 	
-	/** datの内容から被アンカーをカウントした配列を返す */
+	/** 
+	 * datの内容からスレッドを生成する
+	 * @return Thread 
+	 * */
 	private function createFromStr($datStr){
 		$lines = explode("\n", trim($datStr));
+		
+		// レス配列の生成
 		$resAry = array();
 		foreach($lines as $line) {
-			//print $line . "\n";
-			$dict = $this->createRes($line);
-			$resAry[] = $dict;
+			$res = $this->createRes($line);
+			$resAry[] = $res;
 		}
-		$resAry = $this->recieveAnchorCount($resAry);
-
-		return $resAry;
+		
+		// スレッド生成
+		$thread = new Thread();
+		$thread->name = $resAry[0]->title;
+		$thread->resArray = $resAry;
+		return $thread;
 	}
 	
-	/** 1行のデータから連想配列作る */
-	private function createRes($resStr){
+	/**
+	 * 1行のデータからResを作る
+	 * @return Res
+	 * */
+	public function createRes($resStr){
 		$elm = explode("<>", $resStr);
-		$result = array();
+		// $result = array();
+		$res = new Res();
 		$i = 0;
-		$result["name"] = $elm[$i++];
-		$result["address"] = $elm[$i++];
+		$res->name = $elm[$i++];
+		$res->address = $elm[$i++];
 		$dateAndUid = $this->parseDateAndUid($elm[$i++]);
-		$result["date"] = $dateAndUid["date"];
-		$result["uid"] = $dateAndUid["uid"];
-		$result["contents"] = $elm[$i++];
-		$result["title"] = $elm[$i++];
-		$anchors = $this->parseAnchor($result["contents"]);
-		$result["anchors"] = $anchors;
-		$result["movie_flg"] = $this->hasMovie($result["contents"]);
-		return $result;
+		$res->writeDate = $dateAndUid["date"];
+		$res->uid = $dateAndUid["uid"];
+		$res->contents = $elm[$i++];
+		$res->title = $elm[$i++];
+		
+		$aa = $this->parseAnchor($res->contents);
+		print_r($aa);
+		
+		$res->anchors = $this->parseAnchor($res->contents);
+		// $result["movie_flg"] = $this->hasMovie($result["contents"]);
+		return $res;
 	}
 	
 	private function parseDateAndUid($str) {
-		$a = explode("ID:", $str);
+		$a = explode(" ID:", $str);
 		return array("date" => $a[0], "uid" => $a[1]);
 	}
 	
-	private function parseAnchor($str) {
+	public function parseAnchor($str) {
 		$str = preg_replace('@<a(?:>| [^>]*?>)(.*?)</a>@s','$1',$str);
 		preg_match_all("/&gt;&gt;([0-9]+)/", $str, $a);
-		return $a[1];
+		
+		$numbers = array();
+		foreach ($a[1] as $num) {
+			$numbers[] = intval($num);
+		}
+		
+		return $numbers;
 	}
 	
 	private function hasMovie($str) {
@@ -73,11 +91,9 @@ class ThreadFactory {
 		return $result;
 	}
 	
-	private function createHtml($resAry) {
-	}
 	
-	public function create() {
-		return $this->createFromStr($this->loadDat($this->datname));
+	public function create($datname) {
+		return $this->createFromStr($this->loadDat($datname));
 	}
 	
 	
