@@ -51,6 +51,23 @@ class Contents {
 	public function raw() {
 		return $this -> raw;
 	}
+	
+	public function html() {
+		$result = $this -> raw;
+		$result = str_replace(' target="_blank"', "", $result);
+		preg_match_all('/<a href="(.*?)"/', $result, $maches);
+		$searchs = $maches[0];
+		$urls = $maches[1];
+		$reps = array();
+		
+		foreach ($urls as $i => $url) {
+			preg_match_all('/[^\/]*$/', $url, $a);
+			$indexName = "#res" . $a[0][0];
+			$rep = str_replace($url, $indexName, $searchs[$i]);
+			$result = str_replace($searchs[$i], $rep, $result);
+		}
+		return $result;
+	}
 }
 
 /**

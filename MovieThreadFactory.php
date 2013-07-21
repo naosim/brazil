@@ -50,26 +50,29 @@ class MovieThreadFactory {
 
 	private function getMovieUrls($strDat) {
 		$result = array();
-		preg_match_all('/(?:^|[\s　]+)((?:https?|ftp):\/\/[^\s　]+)/', $strDat, $urls);
+		preg_match_all('/(?:^|[\s　]+)((?:h?ttps?|ftp):\/\/[^\s　]+)/', $strDat, $urls);
 		foreach ($urls[1] as $url) {
+			$url = str_replace('&amp;', '&', $url);
 			if (MovieThreadFactory::hasMovie($url)) {
-				// うしろに&amp;がついてることがあるからフィルタ
-				$a = explode("&", $url);
-				if($this -> isExistYoutube($a[0])) {				
-					$result[] = $a[0];
+				if($this -> isExistYoutube($url)) {		
+					$result[] = $url;
 				}
 			}
 		}
-
 		return $result;
 	}
 	
 	private function isExistYoutube($movieUrl) {
-		$a = explode("?v=", $movieUrl);
-		$id = $a[1];
+		$id = MovieThreadFactory::getYoutubeId($movieUrl);
 		$loader = new WebLoader();
 		$result = $loader -> load("http://gdata.youtube.com/feeds/api/videos/$id");
 		return strpos($result, "<?xml version='1.0' encoding='UTF-8'?>") !== false;
+	}
+	
+	public static function getYoutubeId($movieUrl) {
+		$a = explode("v=", $movieUrl);
+		$a = explode('&', $a[1]);
+		return $a[0];
 	}
 
 }

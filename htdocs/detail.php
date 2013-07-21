@@ -8,7 +8,8 @@ function e($str) {
 function getResesHtml($reses) {
 	$result = "";
 	foreach ($reses as $i => $res) {
-		$result .= '<div class="res">';
+		// if(count($res -> recivedAnchorIndexes) == 0) continue;
+		$result .= "<div class=\"res\" id=\"res$i\">";
 		$result .= getOneResHtml($res);
 		$result .= '</div>';
 	}
@@ -18,29 +19,47 @@ function getResesHtml($reses) {
 function getOneResHtml($res) {
 	$result = "";
 	$result .= $res -> index . " : " . $res -> name . " : " . $res -> writeDate -> strDate() . "<br>";
-	$result .= "<strong>" . $res -> contents -> raw() . '</strong><br>';
+	$result .= "<strong>" . $res -> contents -> html() . '</strong><br>';
 
-	if (count($res -> recivedAnchorIndexes) > 0) {
-		$result .= "<div class=\"subres\">";
-		foreach ($res -> recivedAnchorIndexes as $subRes) {
-			$result .= getOneResHtml($subRes);
-		}
-		$result .= "</div>";
-	}
+	// if (count($res -> recivedAnchorIndexes) > 0) {
+		// $result .= "<div class=\"subres\">";
+		// foreach ($res -> recivedAnchorIndexes as $subRes) {
+			// $result .= getOneResHtml($subRes);
+		// }
+		// $result .= "</div>";
+	// }
 	return $result;
 }
 
 function getYoutubeMovie($url) {
-	$ary = explode("?v=", $url);
-	$movieId = $ary[1];
-	return '<iframe width="420" height="315" src="//www.youtube.com/embed/' . $movieId . '" frameborder="0" allowfullscreen></iframe>';
+	$movieId = MovieThreadFactory::getYoutubeId($url);
+	return '<iframe width="420" height="315" src="http://www.youtube.com/embed/' . $movieId . '" frameborder="0" allowfullscreen></iframe>';
 }
 
-$datname = $_GET["dat"];
-$datContents = trim(file_get_contents("../dat/$datname"));
+function getDatName() {
+	// print_r($_ENV);
+	// print_r($GLOBALS);
+	print_r($GLOBALS["argv"][1]);
+	$result = $GLOBALS["argv"][1] ? $GLOBALS["argv"][1] : $_GET["dat"];
+	$result = strpos($result, ".dat") === false ? $result . ".dat" : $result;
+	return $result;
+	
+}
+
+$datname = getDatName();
+$datFileName = "../dat/$datname";
+if(!file_exists($datFileName)) {
+	echo "Dat file not found. > $datFileName";
+	exit;
+}
+$datContents = trim(file_get_contents($datFileName));
 $factory = new MovieThreadFactory();
 $movieThread = $factory -> create($datContents);
 
+if(!$movieThread) {
+	echo "Movies not found at the thread.";
+	exit;
+}
 $pageTitle = $movieThread -> name();
 ?>
 <!DOCTYPE html>
