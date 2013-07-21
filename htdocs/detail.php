@@ -39,7 +39,7 @@ function getYoutubeMovie($url) {
 function getDatName() {
 	// print_r($_ENV);
 	// print_r($GLOBALS);
-	print_r($GLOBALS["argv"][1]);
+	// print_r($GLOBALS["argv"][1]);
 	$result = $GLOBALS["argv"][1] ? $GLOBALS["argv"][1] : $_GET["dat"];
 	$result = strpos($result, ".dat") === false ? $result . ".dat" : $result;
 	return $result;
