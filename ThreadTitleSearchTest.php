@@ -6,11 +6,21 @@ class ThreadTitleSearchTest extends TestCase {
 	public function test() {
 		$subjectUrl = "http://ikura.2ch.net/football/subject.txt";
 		
+		// $url = 'http://ikura.2ch.net/football/';
+		$url = 'http://hayabusa.2ch.net/livefoot/';
+		$searchWords = array("日本");
+		
 		// $search = new ThreadTitleSearch(new WebLoaderMock());
 		$search = new ThreadTitleSearch();
-		$result = $search -> search('http://ikura.2ch.net/football/', array('日本'));
+		
+		// タイトルだけとってくる
+		// $result = $search -> searchTitle($url, $searchWords);
+		
+		// dat保存もやる
+		$result = $search -> search($url, array('日本'));		
 		print_r($result);
 	}
+	
 }
 
 class WebLoaderMock extends WebLoader {

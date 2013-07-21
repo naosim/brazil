@@ -35,6 +35,13 @@ class ThreadTitleSearch {
 		
 		return $result;
 	}
+	
+	public function searchTitle($boardUrl, $searchWords = null) {
+		$this -> boardUrl = $boardUrl;
+		$this -> subjectUrl = $boardUrl . "subject.txt";
+		$datNames = $this -> getSubjectList($this -> subjectUrl, $searchWords);
+		return $datNames;
+	}
 
 	public function getSubjectList($subjectUrl, $searchWords = null) {
 		// ネットから撮ってくる
