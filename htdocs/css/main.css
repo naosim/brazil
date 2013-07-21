@@ -1,0 +1,12 @@
+body {
+	font-family: "ＭＳ Ｐゴシック","MS PGothic","Mona","mona-gothic-jisx0208.1990-0",sans-serif;
+}
+.res {
+	margin-bottom: 8px;
+}
+.subres {
+	margin: 8px;
+	margin-left: 40px;
+	border: 1px solid #eee;
+	padding: 8px;  
+}

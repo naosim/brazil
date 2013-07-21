@@ -15,6 +15,14 @@ class Res {
 	public $title;
 	/** @var number[] */
 	public $anchors;
+	
+	/** @var array */
+	public $recivedAnchorIndexes;
+	
+	/**
+	 * 1から始まるIndex
+	 */
+	public $index;
 }
 
 class WriteDate {

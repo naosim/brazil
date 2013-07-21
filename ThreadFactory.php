@@ -17,10 +17,13 @@ class ThreadFactory {
 		
 		// レス配列の生成
 		$resAry = array();
-		foreach($lines as $line) {
+		foreach($lines as $i => $line) {
 			$res = $this->createRes($line);
+			$res -> index = $i + 1;
 			$resAry[] = $res;
 		}
+		
+		$resAry = $this -> recieveAnchor($resAry);
 		
 		// スレッド生成
 		$thread = new Thread($resAry[0]->title, null, $resAry);
@@ -59,7 +62,7 @@ class ThreadFactory {
 		
 		$numbers = array();
 		foreach ($a[1] as $num) {
-			$numbers[] = intval($num);
+			$numbers[] = intval($num - 1);
 		}
 		
 		return $numbers;
@@ -70,21 +73,16 @@ class ThreadFactory {
 	}
 	
 	
-	private function recieveAnchorCount($resAry) {
-		$result = array();
-		
+	private function recieveAnchor($resAry) {		
 		foreach ($resAry as $res) {
 			$result[] = $res;
-			foreach($res["anchors"] as $index) {
+			$res -> recivedAnchorIndexes = array();
+			foreach($res -> anchors as $index) {
 				$hi_res = $result[$index];
-				if(!isset($hi_res["recieve_anchor_count"])) {
-					$hi_res["recieve_anchor_count"] = 0;
-				}
-				$hi_res["recieve_anchor_count"]++;
-				$result[$index] = $hi_res;
+				$hi_res -> recivedAnchorIndexes[] = $res;
 			}
 		}
-		return $result;
+		return $resAry;
 	}
 	
 	
